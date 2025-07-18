@@ -37,25 +37,11 @@ class _LoginScreenState extends State<LoginScreen> {
                   height: 20,
                 ),
                 // Logo Placeholder
-                const CircleAvatar(
-                  radius: 100,
-                  backgroundColor: Colors.transparent,
-                  backgroundImage: AssetImage(
-                    'assets/images/logo.png',
-                  ), // Replace with your logo asset
-                ),
-                const SizedBox(
-                  height: 10,
+                Image.asset(
+                  'assets/images/logo.png',
+                  height: 300,
                 ),
 
-                const Text(
-                  'Pizzafy',
-                  textAlign: TextAlign.center,
-                  style: TextStyle(
-                    fontSize: 32,
-                    fontWeight: FontWeight.bold,
-                  ),
-                ),
                 const SizedBox(height: 10),
                 TextFieldWidget(
                   hasValidator: false,

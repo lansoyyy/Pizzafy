@@ -1,6 +1,8 @@
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:recipe_app/screens/auth/login_screen.dart';
+import 'package:recipe_app/screens/user_home_screen.dart';
 import 'package:recipe_app/services/add_user.dart';
+import 'package:recipe_app/services/auth_service.dart';
 import 'package:recipe_app/utils/colors.dart';
 import 'package:recipe_app/widgets/button_widget.dart';
 import 'package:recipe_app/widgets/text_widget.dart';
@@ -157,15 +159,13 @@ class _SignupScreenState extends State<SignupScreen> {
 
       addUser(name.text, email.text, number.text);
 
-      // signup(nameController.text, numberController.text, addressController.text,
-      //     emailController.text);
+      // Save login state for auto login
+      await AuthService.saveUserLoginState(email.text, false);
 
       Navigator.of(context).pushReplacement(
-        MaterialPageRoute(builder: (context) => const LoginScreen()),
+        MaterialPageRoute(builder: (context) => const UserHomeScreen()),
       );
       showToast("Registered Successfully!");
-
-      Navigator.pop(context);
     } on FirebaseAuthException catch (e) {
       if (e.code == 'weak-password') {
         showToast('The password provided is too weak.');

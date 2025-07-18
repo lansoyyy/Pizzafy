@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:recipe_app/screens/admin_home_screen.dart';
 import 'package:recipe_app/screens/auth/login_screen.dart';
+import 'package:recipe_app/services/auth_service.dart';
 
 logout(BuildContext context, Widget navigationRoute) {
   return showDialog(
@@ -26,6 +27,9 @@ logout(BuildContext context, Widget navigationRoute) {
               ),
               MaterialButton(
                 onPressed: () async {
+                  // Clear stored login state
+                  await AuthService.clearUserLoginState();
+
                   Navigator.of(context).pushReplacement(
                     MaterialPageRoute(
                         builder: (context) => const LoginScreen()),

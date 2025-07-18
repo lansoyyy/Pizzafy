@@ -1,7 +1,8 @@
 import 'package:firebase_core/firebase_core.dart';
 import 'package:flutter/material.dart';
 import 'package:recipe_app/firebase_options.dart';
-import 'package:recipe_app/screens/auth/login_screen.dart';
+import 'package:recipe_app/screens/splash_screen.dart';
+import 'package:recipe_app/services/auth_service.dart';
 
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();
@@ -9,6 +10,7 @@ void main() async {
     name: 'recipe-app-da5de',
     options: DefaultFirebaseOptions.currentPlatform,
   );
+  await AuthService.init();
   runApp(const MyApp());
 }
 
@@ -20,7 +22,7 @@ class MyApp extends StatelessWidget {
   Widget build(BuildContext context) {
     return const MaterialApp(
       title: 'Pizzafy',
-      home: LoginScreen(),
+      home: SplashScreen(),
     );
   }
 }

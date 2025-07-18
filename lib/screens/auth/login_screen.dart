@@ -2,6 +2,7 @@ import 'package:firebase_auth/firebase_auth.dart';
 import 'package:recipe_app/screens/admin_home_screen.dart';
 import 'package:recipe_app/screens/auth/signup_screen.dart';
 import 'package:recipe_app/screens/user_home_screen.dart';
+import 'package:recipe_app/services/auth_service.dart';
 import 'package:recipe_app/utils/colors.dart';
 import 'package:recipe_app/widgets/button_widget.dart';
 import 'package:recipe_app/widgets/text_widget.dart';
@@ -293,6 +294,9 @@ class _LoginScreenState extends State<LoginScreen> {
     try {
       await FirebaseAuth.instance.signInWithEmailAndPassword(
           email: email.text, password: password.text);
+
+      // Save login state for auto login (only for regular users)
+      await AuthService.saveUserLoginState(email.text, false);
 
       Navigator.of(context).pushReplacement(
         MaterialPageRoute(builder: (context) => const UserHomeScreen()),

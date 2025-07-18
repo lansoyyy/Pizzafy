@@ -3,7 +3,8 @@ import 'package:recipe_app/screens/tabs/admin/add_recipe_screen.dart';
 import 'package:recipe_app/screens/auth/login_screen.dart';
 
 import 'package:recipe_app/screens/tabs/admin/home_tab.dart';
-import 'package:recipe_app/screens/tabs/admin/my_recipe_tab.dart';
+import 'package:recipe_app/screens/tabs/admin/admin_recipes_tab.dart';
+import 'package:recipe_app/screens/tabs/admin/orders_tab.dart';
 import 'package:recipe_app/screens/tabs/users/profile_tab.dart';
 import 'package:recipe_app/utils/colors.dart';
 import 'package:recipe_app/widgets/logout_widget.dart';
@@ -21,7 +22,8 @@ class _AdminHomeScreenState extends State<AdminHomeScreen> {
 
   static final List<Widget> _widgetOptions = <Widget>[
     HomeTab(),
-    MyRecipeTab(),
+    AdminRecipesTab(),
+    OrdersTab(),
     // const FavoritesTab(),
     // const ProfileTab(),
   ];
@@ -80,10 +82,10 @@ class _AdminHomeScreenState extends State<AdminHomeScreen> {
             icon: Icon(Icons.book),
             label: 'My Menu',
           ),
-          // BottomNavigationBarItem(
-          //   icon: Icon(Icons.favorite),
-          //   label: 'Favorites',
-          // ),
+          BottomNavigationBarItem(
+            icon: Icon(Icons.shopping_cart),
+            label: 'Orders',
+          ),
           // BottomNavigationBarItem(
           //   icon: Icon(Icons.person),
           //   label: 'Profile',

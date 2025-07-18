@@ -6,125 +6,20 @@ import 'package:recipe_app/utils/colors.dart';
 import 'package:recipe_app/utils/const.dart';
 import 'package:recipe_app/widgets/text_widget.dart';
 import 'package:intl/intl.dart' show DateFormat, toBeginningOfSentenceCase;
-import 'package:recipe_app/services/cart_service.dart';
 
-class MyRecipeTab extends StatefulWidget {
-  bool? isUser;
-
-  MyRecipeTab({
-    this.isUser = false,
-  });
+class AdminRecipesTab extends StatefulWidget {
+  const AdminRecipesTab({super.key});
 
   @override
-  State<MyRecipeTab> createState() => _MyRecipeTabState();
+  State<AdminRecipesTab> createState() => _AdminRecipesTabState();
 }
 
-class _MyRecipeTabState extends State<MyRecipeTab> {
+class _AdminRecipesTabState extends State<AdminRecipesTab> {
   final searchController = TextEditingController();
   String nameSearched = '';
 
   @override
   Widget build(BuildContext context) {
-    if (widget.isUser == true) {
-      // Show user orders
-      return Padding(
-        padding: const EdgeInsets.all(20.0),
-        child: StreamBuilder(
-          stream: CartService.getUserOrders(),
-          builder: (context, snapshot) {
-            if (snapshot.hasError) {
-              return const Center(child: Text('Error loading orders'));
-            }
-            if (snapshot.connectionState == ConnectionState.waiting) {
-              return const Center(child: CircularProgressIndicator());
-            }
-            final orders = snapshot.data?.docs ?? [];
-            if (orders.isEmpty) {
-              return const Center(child: Text('No orders yet.'));
-            }
-            return ListView.builder(
-              itemCount: orders.length,
-              itemBuilder: (context, index) {
-                final order = orders[index].data() as Map<String, dynamic>;
-                final items = order['items'] as List<dynamic>? ?? [];
-                final total = order['totalAmount'] ?? 0;
-                final status = order['status'] ?? 'pending';
-                final orderNumber = order['orderNumber'] ?? '';
-                return Card(
-                  margin: const EdgeInsets.symmetric(vertical: 8),
-                  child: Padding(
-                    padding: const EdgeInsets.all(16.0),
-                    child: Column(
-                      crossAxisAlignment: CrossAxisAlignment.start,
-                      children: [
-                        TextWidget(
-                          text: 'Order #$orderNumber',
-                          fontSize: 16,
-                          fontFamily: 'Bold',
-                          color: primary,
-                        ),
-                        const SizedBox(height: 8),
-                        TextWidget(
-                          text: 'Status: $status',
-                          fontSize: 14,
-                          color: Colors.grey,
-                        ),
-                        const SizedBox(height: 8),
-                        ...items.map((item) {
-                          return Padding(
-                            padding: const EdgeInsets.symmetric(vertical: 2.0),
-                            child: Row(
-                              children: [
-                                SizedBox(
-                                  width: 40,
-                                  height: 40,
-                                  child: Image.network(item['recipeImage'],
-                                      fit: BoxFit.cover),
-                                ),
-                                const SizedBox(width: 8),
-                                Expanded(
-                                  child: TextWidget(
-                                    text:
-                                        '${item['recipeName']} x${item['quantity']}',
-                                    fontSize: 14,
-                                  ),
-                                ),
-                                TextWidget(
-                                  text: 'P${item['recipePrice']}',
-                                  fontSize: 14,
-                                  color: primary,
-                                ),
-                              ],
-                            ),
-                          );
-                        }).toList(),
-                        const Divider(),
-                        Row(
-                          mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                          children: [
-                            TextWidget(
-                              text: 'Total:',
-                              fontSize: 14,
-                              fontFamily: 'Bold',
-                            ),
-                            TextWidget(
-                              text: 'P${total.toStringAsFixed(2)}',
-                              fontSize: 16,
-                              fontFamily: 'Bold',
-                              color: primary,
-                            ),
-                          ],
-                        ),
-                      ],
-                    ),
-                  ),
-                );
-              },
-            );
-          },
-        ),
-      );
-    }
     return Padding(
       padding: const EdgeInsets.all(20.0),
       child: Column(
@@ -168,7 +63,7 @@ class _MyRecipeTabState extends State<MyRecipeTab> {
           StreamBuilder<QuerySnapshot>(
               stream: FirebaseFirestore.instance
                   .collection('Recipe')
-                  .where('userId', isEqualTo: userId)
+                  // .where('userId', isEqualTo: userId)
                   .where('name',
                       isGreaterThanOrEqualTo:
                           toBeginningOfSentenceCase(nameSearched))
@@ -202,7 +97,7 @@ class _MyRecipeTabState extends State<MyRecipeTab> {
                           onTap: () {
                             Navigator.of(context).push(MaterialPageRoute(
                                 builder: (context) => DetailsScreen(
-                                      isUser: true,
+                                      isUser: false, // Admin view
                                       id: data.docs[index].id,
                                     )));
                           },

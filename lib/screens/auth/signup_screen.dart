@@ -22,6 +22,7 @@ class _SignupScreenState extends State<SignupScreen> {
   final password = TextEditingController();
   final name = TextEditingController();
   final number = TextEditingController();
+  final address = TextEditingController();
 
   @override
   Widget build(BuildContext context) {
@@ -86,6 +87,22 @@ class _SignupScreenState extends State<SignupScreen> {
                   validator: (value) {
                     if (value == null || value.isEmpty) {
                       return 'Please enter a email';
+                    }
+
+                    return null;
+                  },
+                ),
+                const SizedBox(height: 10),
+                TextFieldWidget(
+                  hasValidator: false,
+                  hint: 'Enter delivery address',
+                  borderColor: Colors.grey,
+                  label: 'Delivery Address',
+                  controller: address,
+                  maxLine: 3,
+                  validator: (value) {
+                    if (value == null || value.isEmpty) {
+                      return 'Please enter a delivery address';
                     }
 
                     return null;
@@ -157,7 +174,7 @@ class _SignupScreenState extends State<SignupScreen> {
       await FirebaseAuth.instance.createUserWithEmailAndPassword(
           email: email.text, password: password.text);
 
-      addUser(name.text, email.text, number.text);
+      addUser(name.text, email.text, number.text, address.text);
 
       // Save login state for auto login
       await AuthService.saveUserLoginState(email.text, false);

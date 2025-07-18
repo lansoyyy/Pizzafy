@@ -1,5 +1,6 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
+import 'package:recipe_app/services/cart_service.dart';
 import 'package:recipe_app/utils/colors.dart';
 import 'package:recipe_app/utils/const.dart';
 import 'package:recipe_app/widgets/text_widget.dart';
@@ -20,6 +21,8 @@ class DetailsScreen extends StatefulWidget {
 }
 
 class _DetailsScreenState extends State<DetailsScreen> {
+  int quantity = 1;
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -65,15 +68,18 @@ class _DetailsScreenState extends State<DetailsScreen> {
                     dynamic data = snapshot.data;
                     return SingleChildScrollView(
                       child: Column(
+                        crossAxisAlignment: CrossAxisAlignment.start,
                         children: [
-                          Container(
-                            width: double.infinity,
-                            height: 175,
-                            decoration: BoxDecoration(
-                                color: Colors.grey,
-                                image: DecorationImage(
-                                    fit: BoxFit.cover,
-                                    image: NetworkImage(data['image']))),
+                          Center(
+                            child: Container(
+                              width: double.infinity,
+                              height: 175,
+                              decoration: BoxDecoration(
+                                  color: Colors.grey,
+                                  image: DecorationImage(
+                                      fit: BoxFit.cover,
+                                      image: NetworkImage(data['image']))),
+                            ),
                           ),
                           const SizedBox(
                             height: 20,
@@ -160,6 +166,93 @@ class _DetailsScreenState extends State<DetailsScreen> {
                           const SizedBox(
                             height: 20,
                           ),
+                          // Add to Cart Section for Users
+                          if (widget.isUser == true)
+                            Padding(
+                              padding: const EdgeInsets.all(16.0),
+                              child: Column(
+                                crossAxisAlignment: CrossAxisAlignment.start,
+                                children: [
+                                  TextWidget(
+                                    text: 'Add to Cart',
+                                    fontSize: 20,
+                                    fontFamily: 'Bold',
+                                    color: primary,
+                                  ),
+                                  const SizedBox(height: 10),
+                                  Row(
+                                    children: [
+                                      IconButton(
+                                        onPressed: () {
+                                          if (quantity > 1) {
+                                            setState(() {
+                                              quantity--;
+                                            });
+                                          }
+                                        },
+                                        icon: const Icon(
+                                            Icons.remove_circle_outline),
+                                        color: primary,
+                                      ),
+                                      Container(
+                                        padding: const EdgeInsets.symmetric(
+                                            horizontal: 20, vertical: 10),
+                                        decoration: BoxDecoration(
+                                          border: Border.all(color: primary),
+                                          borderRadius:
+                                              BorderRadius.circular(8),
+                                        ),
+                                        child: TextWidget(
+                                          text: quantity.toString(),
+                                          fontSize: 18,
+                                          fontFamily: 'Bold',
+                                        ),
+                                      ),
+                                      IconButton(
+                                        onPressed: () {
+                                          setState(() {
+                                            quantity++;
+                                          });
+                                        },
+                                        icon: const Icon(
+                                            Icons.add_circle_outline),
+                                        color: primary,
+                                      ),
+                                      const Spacer(),
+                                      ElevatedButton(
+                                        onPressed: () async {
+                                          try {
+                                            await CartService.addToCart(
+                                              widget.id,
+                                              data['name'],
+                                              data['image'],
+                                              data['cooktime'] ?? '0',
+                                              quantity,
+                                            );
+                                            showToast('Added to cart!');
+                                          } catch (e) {
+                                            showToast(
+                                                'Error adding to cart: $e');
+                                          }
+                                        },
+                                        style: ElevatedButton.styleFrom(
+                                          backgroundColor: primary,
+                                          foregroundColor: Colors.white,
+                                          padding: const EdgeInsets.symmetric(
+                                              horizontal: 20, vertical: 12),
+                                        ),
+                                        child: TextWidget(
+                                          text: 'Add to Cart',
+                                          fontSize: 16,
+                                          fontFamily: 'Bold',
+                                          color: Colors.white,
+                                        ),
+                                      ),
+                                    ],
+                                  ),
+                                ],
+                              ),
+                            ),
                         ],
                       ),
                     );

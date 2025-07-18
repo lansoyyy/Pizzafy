@@ -3,11 +3,12 @@ import 'package:recipe_app/screens/tabs/admin/add_recipe_screen.dart';
 import 'package:recipe_app/screens/auth/login_screen.dart';
 
 import 'package:recipe_app/screens/tabs/admin/home_tab.dart';
-import 'package:recipe_app/screens/tabs/admin/my_recipe_tab.dart';
+import 'package:recipe_app/screens/tabs/users/user_orders_tab.dart';
 import 'package:recipe_app/screens/tabs/users/profile_tab.dart';
 import 'package:recipe_app/utils/colors.dart';
 import 'package:recipe_app/widgets/logout_widget.dart';
 import 'package:recipe_app/widgets/text_widget.dart';
+import 'package:recipe_app/screens/cart_screen.dart';
 
 class UserHomeScreen extends StatefulWidget {
   const UserHomeScreen({super.key});
@@ -23,9 +24,7 @@ class _UserHomeScreenState extends State<UserHomeScreen> {
     HomeTab(
       isUser: true,
     ),
-    MyRecipeTab(
-      isUser: true,
-    ),
+    UserOrdersTab(),
     // const FavoritesTab(),
     const ProfileTab(),
   ];
@@ -48,6 +47,18 @@ class _UserHomeScreenState extends State<UserHomeScreen> {
           color: Colors.white,
         ),
         actions: [
+          if (true) // Always show for users
+            IconButton(
+              onPressed: () {
+                Navigator.of(context).push(
+                  MaterialPageRoute(builder: (context) => CartScreen()),
+                );
+              },
+              icon: const Icon(
+                Icons.shopping_cart,
+                color: Colors.white,
+              ),
+            ),
           IconButton(
             onPressed: () {
               logout(context, const LoginScreen());

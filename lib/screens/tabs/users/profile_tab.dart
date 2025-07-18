@@ -18,6 +18,7 @@ class _ProfileTabState extends State<ProfileTab> {
   final password = TextEditingController();
   final name = TextEditingController();
   final number = TextEditingController();
+  final address = TextEditingController();
   @override
   Widget build(BuildContext context) {
     return StreamBuilder<DocumentSnapshot>(
@@ -39,6 +40,7 @@ class _ProfileTabState extends State<ProfileTab> {
 
           number.text = data['number'];
           email.text = data['email'];
+          address.text = data['address'] ?? '';
           password.text = '*******';
           return Padding(
             padding: const EdgeInsets.all(20.0),
@@ -103,6 +105,22 @@ class _ProfileTabState extends State<ProfileTab> {
                     },
                   ),
                   const SizedBox(height: 10),
+                  TextFieldWidget(
+                    hasValidator: false,
+                    hint: 'Enter delivery address',
+                    borderColor: Colors.grey,
+                    label: 'Delivery Address',
+                    controller: address,
+                    maxLine: 3,
+                    validator: (value) {
+                      if (value == null || value.isEmpty) {
+                        return 'Please enter a delivery address';
+                      }
+
+                      return null;
+                    },
+                  ),
+                  const SizedBox(height: 10),
                   Column(
                     children: [
                       TextFieldWidget(
@@ -138,6 +156,7 @@ class _ProfileTabState extends State<ProfileTab> {
                             .update({
                           'number': number.text,
                           'name': name.text,
+                          'address': address.text,
                         });
 
                         showToast('Profile updated!');

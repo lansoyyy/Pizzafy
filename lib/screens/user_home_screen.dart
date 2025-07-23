@@ -42,7 +42,7 @@ class _UserHomeScreenState extends State<UserHomeScreen> {
         automaticallyImplyLeading: false,
         backgroundColor: primary,
         title: TextWidget(
-          text: 'Pizzafy',
+          text: 'PizzApp',
           fontSize: 18,
           color: Colors.white,
         ),

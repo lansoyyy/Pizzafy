@@ -30,7 +30,7 @@ class _DetailsScreenState extends State<DetailsScreen> {
         foregroundColor: Colors.white,
         backgroundColor: primary,
         title: TextWidget(
-          text: 'Pizzafy',
+          text: 'PizzApp',
           fontSize: 18,
           color: Colors.white,
         ),
